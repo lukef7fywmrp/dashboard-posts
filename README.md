@@ -1,4 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blog Dashboard
+
+A blog dashboard application built with Next.js that interacts with the JSONPlaceholder API to manage posts.
+
+## Important Notes About Testing
+
+This application uses [JSONPlaceholder](https://jsonplaceholder.typicode.com/) as a mock API service. Please note:
+
+1. **Data Persistence**:
+
+   - Changes (create, update, delete) are not actually persisted on the server
+   - The API simulates successful responses but doesn't store the data
+   - If you refresh the page, you'll see the original data again
+
+2. **Testing Behavior**:
+   - You can test all CRUD operations in the UI
+   - Changes will appear to work until you refresh the page
+   - This is intentional for development and testing purposes
+
+## Features
+
+- Admin Dashboard with CRUD operations for posts
+- Rich Text Editor for post content
+- Public view of posts with details page
+- Modern UI with TailwindCSS and shadcn/ui
+- React Query for data fetching and caching
 
 ## Getting Started
 
@@ -16,18 +41,29 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/admin` - Admin dashboard for managing posts
+- `/posts/[id]` - Individual post view
+- `/` - Public list of posts
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js (App Router)
+- TailwindCSS
+- shadcn/ui components
+- React Query
+- Plate Rich Text Editor
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project was created as a technical test to demonstrate:
+
+- Next.js best practices
+- Modern UI/UX implementation
+- State management with React Query
+- Error handling
+- Code structure and readability
 
 ## Deploy on Vercel
 
