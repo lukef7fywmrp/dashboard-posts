@@ -52,7 +52,7 @@ export default function PostContent({ id }: { id: string }) {
             <CardTitle>Post Not Found</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>The post you're looking for doesn't exist.</p>
+            <p>The post you&apos;re looking for doesn&apos;t exist.</p>
             <Button variant="outline" className="mt-4" asChild>
               <Link href="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
