@@ -113,7 +113,7 @@ pnpm dev
 
 ## Deployment
 
-The project is deployed on Vercel and can be accessed at: [Add your deployment URL]
+The project is deployed on Vercel and can be accessed at: https://dashboard-posts.vercel.app/
 
 ## Future Improvements
 
