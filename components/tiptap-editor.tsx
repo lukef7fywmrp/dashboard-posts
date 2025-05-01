@@ -24,6 +24,8 @@ import {
   Quote,
   Underline as UnderlineIcon,
 } from "lucide-react";
+import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditorProps {
   content?: string;
@@ -61,8 +63,32 @@ export default function TiptapEditor({
     immediatelyRender: false,
   });
 
+  // Update editor content when prop changes, but only in read-only mode
+  useEffect(() => {
+    if (editor && !editable && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor, editable]);
+
   if (!editor) {
-    return null;
+    return (
+      <div
+        className={`${editable ? "border rounded-lg" : ""} ${className} w-full`}
+      >
+        {editable && (
+          <div className="border-b p-2 flex flex-wrap gap-2">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <Skeleton key={i} className="h-8 w-8" />
+            ))}
+          </div>
+        )}
+        <div className="py-4 space-y-3">
+          <Skeleton className="h-4 w-[60%]" />
+          <Skeleton className="h-4 w-[80%]" />
+          <Skeleton className="h-4 w-[70%]" />
+        </div>
+      </div>
+    );
   }
 
   return (

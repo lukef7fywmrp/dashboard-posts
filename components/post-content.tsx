@@ -7,6 +7,7 @@ import { Post } from "@/types/posts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import TiptapEditor from "./tiptap-editor";
 
 export default function PostContent({ id }: { id: string }) {
   const { data: post, error } = useQuery<Post>({
@@ -80,15 +81,7 @@ export default function PostContent({ id }: { id: string }) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <article className="prose prose-lg dark:prose-invert max-w-none">
-            <div className="space-y-4">
-              {post.body.split("\n").map((paragraph: string, index: number) => (
-                <p key={index} className="leading-relaxed">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </article>
+          <TiptapEditor content={post.body} editable={false} />
         </CardContent>
       </Card>
     </main>

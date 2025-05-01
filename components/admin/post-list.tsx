@@ -1,20 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Post, CreatePostData } from "@/types/posts";
-import PostForm from "./post-form";
-import { createPost, updatePost, deletePost, getPosts } from "@/lib/api/posts";
-import { toast } from "sonner";
 import PostCard from "@/components/post-card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,40 +11,103 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { createPost, deletePost, getPosts, updatePost } from "@/lib/api/posts";
+import { CreatePostData, Post } from "@/types/posts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import PostForm from "./post-form";
 
-interface PostListProps {
-  initialPosts: Post[];
-}
-
-export default function PostList({ initialPosts }: PostListProps) {
+export default function PostList() {
   const queryClient = useQueryClient();
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [postToDelete, setPostToDelete] = useState<Post | null>(null);
   const [deletingPostId, setDeletingPostId] = useState<number | null>(null);
 
-  const { data: posts = initialPosts, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
-    initialData: initialPosts,
   });
 
   const createMutation = useMutation({
     mutationFn: createPost,
-    onSuccess: (newPost) => {
+    onMutate: async (newPost) => {
+      await queryClient.cancelQueries({ queryKey: ["posts"] });
+      const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
+
+      // Create a temporary post with a temporary ID
+      const tempPost = {
+        ...newPost,
+        id: Date.now(), // Temporary ID that will be replaced on success
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
       queryClient.setQueryData<Post[]>(["posts"], (oldPosts) =>
-        oldPosts ? [...oldPosts, newPost] : [newPost]
+        oldPosts ? [tempPost, ...oldPosts] : [tempPost]
       );
+
       setIsCreating(false);
+      return { previousPosts };
+    },
+    onSuccess: (newPost) => {
+      queryClient.setQueryData<Post[]>(
+        ["posts"],
+        (oldPosts) =>
+          oldPosts?.map((post) =>
+            // Replace the temporary post with the real one
+            post.id === newPost.id ? newPost : post
+          ) ?? []
+      );
       toast.success("Post created successfully");
     },
-    onError: () => {
+    onError: (_, __, context) => {
+      if (context?.previousPosts) {
+        queryClient.setQueryData<Post[]>(["posts"], context.previousPosts);
+      }
       toast.error("Failed to create post");
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: updatePost,
+    onMutate: async (updatedPost) => {
+      await queryClient.cancelQueries({ queryKey: ["posts"] });
+      const previousPosts = queryClient.getQueryData<Post[]>(["posts"]);
+
+      // Create a complete post object for optimistic update
+      const optimisticPost = {
+        ...previousPosts?.find((p) => p.id === updatedPost.id), // Get existing post data
+        ...updatedPost, // Override with new data
+        updatedAt: new Date().toISOString(),
+      };
+
+      queryClient.setQueryData<Post[]>(
+        ["posts"],
+        (oldPosts) =>
+          oldPosts?.map((post) =>
+            post.id === updatedPost.id ? optimisticPost : post
+          ) ?? []
+      );
+
+      setEditingPost(null);
+      return { previousPosts };
+    },
+    onError: (_, __, context) => {
+      if (context?.previousPosts) {
+        queryClient.setQueryData<Post[]>(["posts"], context.previousPosts);
+      }
+      toast.error("Failed to update post");
+    },
     onSuccess: (updatedPost) => {
       queryClient.setQueryData<Post[]>(
         ["posts"],
@@ -67,11 +116,7 @@ export default function PostList({ initialPosts }: PostListProps) {
             post.id === updatedPost.id ? updatedPost : post
           ) ?? []
       );
-      setEditingPost(null);
       toast.success("Post updated successfully");
-    },
-    onError: () => {
-      toast.error("Failed to update post");
     },
   });
 
@@ -117,8 +162,10 @@ export default function PostList({ initialPosts }: PostListProps) {
 
   const handleSubmit = async (data: CreatePostData) => {
     if (editingPost) {
+      setEditingPost(null); // Close dialog immediately
       updateMutation.mutate({ ...data, id: editingPost.id });
     } else {
+      setIsCreating(false); // Close dialog immediately
       createMutation.mutate(data);
     }
   };
@@ -135,7 +182,7 @@ export default function PostList({ initialPosts }: PostListProps) {
   }
 
   return (
-    <div className="">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold">Admin Posts</h1>
         <Button onClick={() => setIsCreating(true)}>Create New Post</Button>
@@ -190,7 +237,7 @@ export default function PostList({ initialPosts }: PostListProps) {
       </AlertDialog>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
+        {data?.map((post) => (
           <PostCard
             key={post.id}
             post={post}

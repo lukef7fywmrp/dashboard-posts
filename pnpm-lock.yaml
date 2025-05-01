@@ -62,9 +62,6 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.74.9
         version: 5.74.9(@tanstack/react-query@5.74.9(react@19.1.0))(react@19.1.0)
-      '@tinymce/tinymce-react':
-        specifier: ^6.1.0
-        version: 6.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tinymce@7.8.0)
       '@tiptap/extension-color':
         specifier: ^2.11.9
         version: 2.11.9(@tiptap/core@2.11.9(@tiptap/pm@2.11.9))(@tiptap/extension-text-style@2.11.9(@tiptap/core@2.11.9(@tiptap/pm@2.11.9)))
@@ -179,9 +176,6 @@ importers:
       tailwind-scrollbar-hide:
         specifier: ^2.0.0
         version: 2.0.0(tailwindcss@4.1.4)
-      tinymce:
-        specifier: ^7.8.0
-        version: 7.8.0
       uploadthing:
         specifier: 7.2.0
         version: 7.2.0(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.4)
@@ -1151,16 +1145,6 @@ packages:
     resolution: {integrity: sha512-F8xCXDQRDgsPzLzX9+d6ycNoITAIU2bycc1idZd06bt/GjN1quEJDjHvEDWZGoVn0A/ZmntVrYv6TE0kR7c7LA==}
     peerDependencies:
       react: ^18 || ^19
-
-  '@tinymce/tinymce-react@6.1.0':
-    resolution: {integrity: sha512-K0MP3yYVKe8+etUwsg6zyRq+q9TGLaVf005WiBHiB8JZEomAwbBPERGunhU9uOqNQ5gJs8yVOPZ68Xcd1UHclA==}
-    peerDependencies:
-      react: ^19.0.0 || ^18.0.0 || ^17.0.1 || ^16.7.0
-      react-dom: ^19.0.0 || ^18.0.0 || ^17.0.1 || ^16.7.0
-      tinymce: ^7.0.0 || ^6.0.0 || ^5.5.1
-    peerDependenciesMeta:
-      tinymce:
-        optional: true
 
   '@tiptap/core@2.11.9':
     resolution: {integrity: sha512-UZSxQLLyJst47xep3jlyKM6y1ebZnmvbGsB7njBVjfxf5H+4yFpRJwwNqrBHM/vyU55LCtPChojqaYC1wXLf6g==}
@@ -3165,9 +3149,6 @@ packages:
     resolution: {integrity: sha512-mEwzpUgrLySlveBwEVDMKk5B57bhLPYovRfPAXD5gA/98Opn0rCDj3GtLwFvCvH5RK9uPCExUROW5NjDwvqkxw==}
     engines: {node: '>=12.0.0'}
 
-  tinymce@7.8.0:
-    resolution: {integrity: sha512-MUER5MWV9mkOB4expgbWknh/C5ZJvOXQlMVSx4tJxTuYtcUCDB6bMZ34fWNOIc8LvrnXmGHGj0eGQuxjQyRgrA==}
-
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
 
@@ -4248,14 +4229,6 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.74.9
       react: 19.1.0
-
-  '@tinymce/tinymce-react@6.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tinymce@7.8.0)':
-    dependencies:
-      prop-types: 15.8.1
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-    optionalDependencies:
-      tinymce: 7.8.0
 
   '@tiptap/core@2.11.9(@tiptap/pm@2.11.9)':
     dependencies:
@@ -6841,8 +6814,6 @@ snapshots:
     dependencies:
       fdir: 6.4.4(picomatch@4.0.2)
       picomatch: 4.0.2
-
-  tinymce@7.8.0: {}
 
   tippy.js@6.3.7:
     dependencies:
